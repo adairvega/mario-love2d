@@ -2,6 +2,7 @@ WINDOW_WIDTH = 1280
 WINDOW_HEIGHT = 720
 
 anim8 = require 'lib/anim8/anim8'
+sti = require 'lib/Simple-Tiled-Implementation/sti'
 
 require 'src/StateMachine'
 require 'src/states/BaseState'

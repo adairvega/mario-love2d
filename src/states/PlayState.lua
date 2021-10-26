@@ -7,12 +7,17 @@ function playState()
         world = love.physics.newWorld(0, 700, true)
         world:setCallbacks(comienzaContacto, terminaContacto, preSolve)
 
+        gameMap = sti('maps/level1.lua')
+
         -- Scale
         --love.physics.setMeter(scale)
         suelo = {}
 
-        suelo.body = love.physics.newBody(world, WINDOW_WIDTH / 2, WINDOW_HEIGHT - 100, 'static')
-        suelo.shape = love.physics.newRectangleShape(900, 200)
+        local plataforma = gameMap.layers['Plataformas'].objects[1]
+
+
+        suelo.body = love.physics.newBody(world,plataforma.x + plataforma.width / 2, plataforma.y + plataforma.height /2, 'static')
+        suelo.shape = love.physics.newRectangleShape(plataforma.width, plataforma.height)
         suelo.fixture = love.physics.newFixture(suelo.body, suelo.shape)
         suelo.fixture:setUserData('Suelo')
 
@@ -35,7 +40,7 @@ function playState()
 
          -- Colisionador jugador
         -- este objeto se creó primero, entonces es el "objeto a"
-        player.body = love.physics.newBody(world, WINDOW_WIDTH / 2, 0, 'dynamic')
+        player.body = love.physics.newBody(world, 10, 0, 'dynamic')
         player.shape = love.physics.newRectangleShape(14, 20)
         player.fixture = love.physics.newFixture(player.body, player.shape)
         player.fixture:setUserData('Player')
@@ -54,6 +59,8 @@ function playState()
     -- Update
     state.update = function(self, dt)
         world:update(dt)
+        gameMap:update(dt)
+
         local px, py = player.body:getPosition()
 
         player.grounded = false
@@ -90,13 +97,16 @@ function playState()
     state.render = function(self)
         local px, py = player.body:getPosition()
 
+        -- Camara
         love.graphics.push()
         love.graphics.applyTransform(
             love.math.newTransform(0, 0, nil, 5, 5, px - 128, py - 72)
         )
 
-        love.graphics.setColor(0.5, 0.5, 0.5)
-        love.graphics.polygon('fill', suelo.body:getWorldPoints(suelo.shape:getPoints()))
+        gameMap:drawLayer(gameMap.layers['Capa de patrones 1'])
+
+        -- love.graphics.setColor(0.5, 0.5, 0.5)
+        -- love.graphics.polygon('fill', suelo.body:getWorldPoints(suelo.shape:getPoints()))
  
         love.graphics.setColor(0.5, 1, 0.5)
         love.graphics.polygon('line', player.body:getWorldPoints(player.shape:getPoints()))
