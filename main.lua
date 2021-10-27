@@ -4,6 +4,9 @@ WINDOW_HEIGHT = 720
 anim8 = require 'lib/anim8/anim8'
 sti = require 'lib/Simple-Tiled-Implementation/sti'
 
+require 'src/Player'
+require 'src/Levels'
+
 require 'src/StateMachine'
 require 'src/states/BaseState'
 require 'src/states/HomeScreen'
